@@ -1,35 +1,67 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { displayToDoItems } from '../actions/action'
 
-function ListItem({ items, setItems }) {
+function ListItem() {
     const param = useParams()
     const { index } = param
-    const item = items[`${index}`]
-    const [addItem, setAddItem] = useState('')
-    const handleAddInput = (e) => {
-        setAddItem(e.target.value)
+    let arr = useSelector(state => state.items[`${index}`])
+    console.log(arr)
+    const [item, setItem] = useState('')
+    const dispatch = useDispatch()
+
+    const handleCurrentInput = (e) => {
+        setItem(e.target.value)
     }
+
     const handleAddItem = (e) => {
-        //setItems(prev => [...prev, prev[`${index}`])
+        if (arr === undefined) {
+            arr = []
+        }
+        arr.push(item)
+        dispatch(displayToDoItems(index, arr))
+        setItem('')
+    }
+
+    const handleDelete = (id) => {
+        let truth =  window.confirm('Do you want to delete it')
+        if(truth) {
+            arr.splice(id, 1)
+            console.log(id)
+            dispatch(displayToDoItems(index, arr))
+            setItem('')
+        }
+    }
+
+    const handleEdit = (id) => {
+        let updatedValue = prompt("Enter the updated value")
+        arr[0] = updatedValue
+        dispatch(displayToDoItems(index, arr))
+        setItem('')
     }
     return (
         <>
             <Link to='/'><button>Back to Home</button></Link>
             <div className='nav'>
-            <input type = 'text' onChange = {handleAddInput} value={addItem}/>
-            <button onClick={handleAddItem}>Add</button>
+                <input type='text' onChange={handleCurrentInput} value={item} />
+                <button onClick={handleAddItem}>Add</button>
             </div>
-            <ul>
-                {item ? item.map((ele, index) => {
-                    return (
-                        <>
-                        <li>{ele}</li>
-                        <button>Delete</button>
-                        </>
-                    )
-                })
-                    : null}
-            </ul>
+            <div>
+            {arr ? arr.map((ele, index) => {
+                return (
+                    <>
+                        <h2>{ele}</h2>
+                        <button onClick={(id) => handleDelete(index)}>Delete</button>
+                        <button onClick = {(id) => handleEdit(index)}>Edit</button>
+                        <button>Check</button>
+                    </>
+                )
+
+            })
+                : null}
+            </div>
+
         </>
     )
 }

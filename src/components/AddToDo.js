@@ -1,19 +1,31 @@
 import React, { useState } from 'react'
 import DisplayTodoNames from './DisplayTodoNames'
+import { useSelector, useDispatch } from 'react-redux'
+import {addTodoListNames} from '../actions/action'
 
-function AddToDo({names, setNames}) {
-    const [todoListName, setTodoListName] = useState(null);
+function AddToDo() {
+
+    const [listNames, setListNames] = useState(null);
+
     const handleOnChange = (e) => {
-        setTodoListName(e.target.value)
+        setListNames(e.target.value)
     }
+
     const handleOnClick = () => {
-        setNames((prevNames) => [...prevNames, todoListName])
-        setTodoListName('')
+        dispatch(addTodoListNames(listNames))
+        setListNames('')
     }
+
+    const dispatch = useDispatch()
+    const names = useSelector(state => state.names)
+
     return (
         <>
             <div className='nav'>
-                <input className = 'input' type='text' placeholder='Type the name of a new todo list' value={todoListName} onChange={handleOnChange} />
+                <input className = 'input' 
+                        type='text' placeholder='Type the name of a new todo list' 
+                        value={listNames} 
+                        onChange={handleOnChange} />
                 <button className='toDoListButton' onClick={handleOnClick}>Create a Todo List</button>
             </div>
             <DisplayTodoNames names={names} />
