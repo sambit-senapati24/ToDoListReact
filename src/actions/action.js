@@ -5,9 +5,33 @@ export const addTodoListNames = (payload) => {
     }
 }
 
-export const displayToDoItems = (id, payload) => {
+export const addToDoItems = (id, payload) => {
     return {
-        type : 'SHOW_ITEM',
+        type : 'ADD_ITEM',
+        id : id,
+        payload: payload
+    }
+}
+
+export const editToDoItems = (id, payload) => {
+    return {
+        type : 'EDIT_ITEM',
+        id : id,
+        payload: payload
+    }
+}
+
+export const deleteToDoItems = (id, payload) => {
+    return {
+        type : 'DELETE_ITEM',
+        id : id,
+        payload: payload
+    }
+}
+
+export const markCompleteToDoItems = (id, payload) => {
+    return {
+        type : 'MARK_COMPLETE',
         id : id,
         payload: payload
     }

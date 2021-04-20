@@ -7,8 +7,8 @@ function App() {
   return (
     <div className="App">
       <Switch>
-        <Route exact path='/' component = {AddToDo}/>
-        <Route exact path='/:index' component = {ListItem}/>
+        <Route exact path='/' component={AddToDo} />
+        <Route exact path='/:index' component={ListItem} />
       </Switch>
     </div>
   );
