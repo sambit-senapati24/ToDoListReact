@@ -6,11 +6,12 @@ import { addToDoItems, editToDoItems, deleteToDoItems, markCompleteToDoItems } f
 function ListItem() {
     const param = useParams()
     const { index } = param
-    let arr = useSelector(state => state.items[`${index}`])
+    let arr = useSelector(state => state.items[`${index}`]) //to fetch array of the particular todo list name
     const [item, setItem] = useState('')
     const [isChecked, setIsChecked] = useState(false);
     const dispatch = useDispatch()
 
+    //event handlers below
     const handleCurrentInput = (e) => {
         setItem(e.target.value)
     }
@@ -27,27 +28,25 @@ function ListItem() {
     const handleDelete = (id) => {
         let truth = window.confirm('Do you want to delete it')
         if (truth) {
-            arr.splice(id, 1)
-            dispatch(deleteToDoItems(index, arr))
+            dispatch(deleteToDoItems(index, id))
             setItem('')
         }
     }
 
     const handleEdit = (id) => {
         let updatedValue = prompt("Enter the updated value")
-        arr[id] = updatedValue
-        dispatch(editToDoItems(index, arr))
+        setIsChecked(false)
+        dispatch(editToDoItems(index, id, updatedValue))
         setItem('')
     }
 
     const handleCheck = (id) => {
         if (isChecked === false) {
-            arr[`${id}`] = arr[`${id}`] + '(completed)'
+            dispatch(markCompleteToDoItems(index, id, ' (completed)', false))
+            setIsChecked(prev => !prev)
         } else {
-            arr[`${id}`] = arr[`${id}`].replace('(completed)', '')
+            dispatch(markCompleteToDoItems(index, id, '', true))
         }
-        dispatch(markCompleteToDoItems(index, arr))
-        setIsChecked(prev => !prev)
     }
 
     return (
@@ -59,12 +58,13 @@ function ListItem() {
             </div>
             <div>
                 {arr ? arr.map((ele, id) => {
+                    let currIndex = id
                     return (
                         <>
                             <h2>{ele}</h2>
-                            <button onClick={(id) => handleDelete(id)}>Delete</button>
-                            <button onClick={(id) => handleEdit(id)}>Edit</button>
-                            <button onClick={(id) => handleCheck(id)}>Check</button>
+                            <button onClick={() => handleDelete(currIndex)}>Delete</button>
+                            <button onClick={() => handleEdit(currIndex)}>Edit</button>
+                            <button onClick={() => handleCheck(currIndex)}>Check</button>
                         </>
                     )
 

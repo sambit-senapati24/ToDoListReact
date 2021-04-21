@@ -13,26 +13,29 @@ export const addToDoItems = (id, payload) => {
     }
 }
 
-export const editToDoItems = (id, payload) => {
+export const editToDoItems = (index, id, payload) => {
     return {
         type : 'EDIT_ITEM',
+        index : index,
         id : id,
         payload: payload
     }
 }
 
-export const deleteToDoItems = (id, payload) => {
+export const deleteToDoItems = (index, id) => {
     return {
         type : 'DELETE_ITEM',
+        index : index,
         id : id,
-        payload: payload
     }
 }
 
-export const markCompleteToDoItems = (id, payload) => {
+export const markCompleteToDoItems = (index, id, payload, truth) => {
     return {
         type : 'MARK_COMPLETE',
+        index : index,
         id : id,
-        payload: payload
+        payload: payload,
+        truth : truth,
     }
 }
